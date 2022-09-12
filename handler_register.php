@@ -14,7 +14,7 @@ if($result){
     exit;
 }
 
-set_email_and_pass_to_db($email,$password);
+add_user($email,$password);
 
 set_sess_mess('success', 'Регистрация успешна' );
 

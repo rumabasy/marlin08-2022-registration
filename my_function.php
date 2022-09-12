@@ -7,7 +7,7 @@ function dump($data, $stop=1){
 	if($stop==1) die;
 }
 
-function set_email_and_pass_to_db($email,$password){
+function add_user($email,$password){
     global $pdo;
     $sql = "INSERT INTO users (email, password) VALUE (:email, :password)";
     $statement = $pdo->prepare($sql);
@@ -37,6 +37,13 @@ function get_pass_by_id($id){
 
 function set_sess_mess($alert, $text){
     return $_SESSION[$alert] = $text;
+}
+
+function display_sess_mess($name){
+    if (isset($_SESSION[$name])){
+        echo "<div class=\"alert alert-{$name} text-dark\" role=\"alert\">{$_SESSION[$name]}</div>";
+        unset($_SESSION[$name]);
+    }
 }
 
 function redirect_to($path){
