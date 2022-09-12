@@ -49,3 +49,24 @@ function display_sess_mess($name){
 function redirect_to($path){
     header("Location: ".$path);
 }
+ 
+function login($name,$pass){
+    $id=get_id_by_email($name);
+    if(!$id){
+        set_sess_mess('danger','Такого логина в базе нет');
+        redirect_to('page_login.php');
+        exit;
+    } else {
+        $hash= get_pass_by_id($id);
+        $check= password_verify($_POST['password'], $hash);
+        if(!$check){
+            set_sess_mess('danger','Логин и пароль не совпадают');
+            redirect_to('page_login.php');
+            exit;
+        } 
+        else {
+            // redirect_to('users.php');
+            return $check;
+        }
+    }
+}
