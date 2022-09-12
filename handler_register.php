@@ -9,12 +9,14 @@ $pdo = new PDO("mysql:host=localhost;dbname=marlin","root" , "");
 $result= get_id_by_email($email);
 
 if($result){
-    $_SESSION['alert']='danger';
-    header("Location: page_register.php");
+    set_sess_mess('danger', 'Этот эл. адрес уже занят другим пользователем.' );
+    redirect_to('page_register.php');
     exit;
 }
 
-save_email_and_pass_to_db($email,$password);
+set_email_and_pass_to_db($email,$password);
 
-$_SESSION['alert']='success';
-header("Location: page_login.php");
+set_sess_mess('success', 'Регистрация успешна' );
+
+redirect_to('page_login.php');
+

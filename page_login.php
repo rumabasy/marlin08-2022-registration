@@ -34,17 +34,16 @@
             </a>
         </div>
         <div class="card p-4 border-top-left-radius-0 border-top-right-radius-0">
-            <?php if($_SESSION['alert']=='success') : ?>
+            <?php if($_SESSION['success']) : ?>
                 <div class="alert alert-success">
-                    Регистрация успешна
+                    <?php echo $_SESSION['success'] ?>
                 </div>
-            <?php unset($_SESSION['alert']); endif; ?>
-            <?php echo $_SESSION['alert']; ?>
-            <?php if($_SESSION['alert']=='danger') : ?>
+            <?php unset($_SESSION['success']); endif; ?>
+            <?php if($_SESSION['danger']) : ?>
                 <div class="alert alert-danger">
-                    Неправильная пара логин - пароль
+                    <?php echo $_SESSION['danger'] ?>
                 </div>
-            <?php unset($_SESSION['alert']); endif; ?>
+            <?php unset($_SESSION['danger']); endif; ?>
             <form action="handler_login.php" method='post'>
                 <div class="form-group">
                     <label class="form-label" for="username">Email</label>

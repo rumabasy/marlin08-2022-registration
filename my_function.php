@@ -7,7 +7,7 @@ function dump($data, $stop=1){
 	if($stop==1) die;
 }
 
-function save_email_and_pass_to_db($email,$password){
+function set_email_and_pass_to_db($email,$password){
     global $pdo;
     $sql = "INSERT INTO users (email, password) VALUE (:email, :password)";
     $statement = $pdo->prepare($sql);
@@ -22,7 +22,8 @@ function get_id_by_email($email){
     $sql = "SELECT id FROM users WHERE email=:email";
     $statement=$pdo->prepare($sql);
     $statement->execute(['email'=>$email]);
-    return $result = $statement->fetch(PDO::FETCH_ASSOC);
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+    return $result['id'];
 }
 
 function get_pass_by_id($id){
@@ -34,3 +35,10 @@ function get_pass_by_id($id){
     return $res['password'];
 }
 
+function set_sess_mess($alert, $text){
+    return $_SESSION[$alert] = $text;
+}
+
+function redirect_to($path){
+    header("Location: ".$path);
+}
