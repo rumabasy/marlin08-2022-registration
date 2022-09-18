@@ -1,4 +1,6 @@
 <?php
+session_start();
+$pdo = new PDO("mysql:host=localhost;dbname=marlin", "root", "");
 
 function dump($data, $stop=1){
 	echo '<pre>';
