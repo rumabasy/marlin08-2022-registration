@@ -76,7 +76,7 @@ function login($name,$pass){
 function save_avatar_into_media($img, $id){
     if(!$img["image"]['name']){
         $name='no';
-    } else{
+    } else {
         //запись медиа-данных, статуса и нового имени картинки аватара в таблицу media
         $extension = pathinfo($img["image"]['name'], PATHINFO_EXTENSION);
         $name = uniqid().'.'.$extension;
@@ -101,12 +101,12 @@ function save_into_common_infa($post){
     global $pdo;
 
     $id_user = $_SESSION['id'];
-    if($post['username']) $name=$post['username'] else $name="no";
-    if($post['tags']) $tags=$post['tags'] else $tags="no";
-    if($post['work_space']) $work_space=$post['work_space'] else $work_space="no";
-    if($post['phone']) $phone=$post['phone'] else $phone="no";
-    if($post['mailto']) $mailto=$post['mailto'] else $mailto="no";
-    if($post['address']) $address=$post['address'] else $address="no";
+    if($post['username']) $name=$post['username']; else $name="no";
+    if($post['tags']) $tags=$post['tags']; else $tags="no";
+    if($post['work_space']) $work_space=$post['work_space']; else $work_space="no";
+    if($post['phone']) $phone=$post['phone']; else $phone="no";
+    if($post['mailto']) $mailto=$post['mailto']; else $mailto="no";
+    if($post['address']) $address=$post['address']; else $address="no";
 
     $sql = "INSERT INTO common_infa (name, id_user, tags, work_space, phone, mailto, address) VALUES(:name, :id_user, :tags, :work_space, :phone, :mailto, :address)";
     $statement = $pdo->prepare($sql);
@@ -124,9 +124,9 @@ function save_into_common_infa($post){
 function save_socials($post){
     global $pdo;
     $id_user= $_SESSION['id'];
-    if($post['vk']) $vk=$post['vk'] else $vk="no";
-    if($post['t_g']) $tg=$post['t_g'] else $tg="no";
-    if($post['inst_g']) $inst=$post['inst_g'] else $inst="no";
+    if($post['vk']) $vk=$post['vk']; else $vk="no";
+    if($post['t_g']) $tg=$post['t_g']; else $tg="no";
+    if($post['inst_g']) $inst=$post['inst_g']; else $inst="no";
     $sql = "INSERT INTO socials (id_user, vk, tg, inst) VALUES(:id_user, :tg, :vk, :inst)";
     $statement = $pdo->prepare($sql);
     $statement->execute([
@@ -134,5 +134,17 @@ function save_socials($post){
         'tg' => $tg,
         'vk' => $vk,
         'inst' => $inst,
+    ]);
+}
+
+function save_status($post){
+    global $pdo;
+    $id_user=$_SESSION['id'];
+    $status=$post['status'];
+    $sql = "INSERT INTO status (id_user, status) VALUES(:id_user, :status)";
+    $statement=$pdo->prepare($sql);
+    $statement->execute([
+        'id_user'=> $id_user,
+        'status' => $status,
     ]);
 }
