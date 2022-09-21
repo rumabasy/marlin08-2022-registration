@@ -71,6 +71,13 @@
                                     <input type="text" id="simpleinput" class="form-control" name="phone">
                                 </div>
 
+                                <!-- tags -->
+                                <div class="form-group">
+                                    <label class="form-label" for="simpleinput">Теги для поиска</label>
+                                    <input type="text" id="simpleinput" class="form-control" name="tags">
+                                </div>
+
+
                                 <!-- address -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Адрес</label>

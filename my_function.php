@@ -72,3 +72,63 @@ function login($name,$pass){
         }
     }
 }
+
+function save_avatar_into_media($img, $id){
+    //запись медиа-данных, статуса и нового имени картинки аватара в таблицу media
+    $extension = pathinfo($img["image"]['name'], PATHINFO_EXTENSION);
+	$name = uniqid().'.'.$extension;
+    //создание нового имени со старым расширением
+	move_uploaded_file($img["image"]['tmp_name'], "uploads/".$name);
+    //запись файла с новым именем в uploads
+    $id_user=$id;
+    global $pdo;
+	$sql = "INSERT INTO media (img, id_user) VALUES (:img, :id_user)";
+	$statement = $pdo->prepare($sql);
+	$statement->bindparam(":img", $name);
+	$statement->bindparam(":id_user", $id_user);
+	$statement->execute([
+        "img" => $name,
+        'id_user' => $id_user,
+    ]);
+    //запись имени и id в бд
+}
+
+function save_into_common_infa($post){
+    global $pdo;
+    
+    $id_user = $_SESSION['id'];
+    if($post['username']) $name=$post['username'] else $name="no";
+    if($post['tags']) $tags=$post['tags'] else $tags="no";
+    if($post['work_space']) $work_space=$post['work_space'] else $work_space="no";
+    if($post['phone']) $phone=$post['phone'] else $phone="no";
+    if($post['mailto']) $mailto=$post['mailto'] else $mailto="no";
+    if($post['address']) $address=$post['address'] else $address="no";
+
+    $sql = "INSERT INTO common_infa (name, id_user, tags, work_space, phone, mailto, address) VALUES(:name, :id_user, :tags, :work_space, :phone, :mailto, :address)";
+    $statement = $pdo->prepare($sql);
+    $statement->execute([
+        'name' => $name,
+        'id_user' => $id_user,
+        'tags' => $tags,
+        'work_space' => $work_space,
+        'phone' => $phone,
+        'mailto' => $mailto,
+        'address' => $address,
+    ]);
+}
+
+function save_socials($post){
+    global $pdo;
+    $id_user= $_SESSION['id'];
+    $vk=$post['vk'];
+    $tg=$post['t_g'];
+    $inst=$post['inst_g'];
+    $sql = "INSERT INTO socials (id_user, vk, tg, inst) VALUES(:id_user, :tg, :vk, :inst)";
+    $statement = $pdo->prepare($sql);
+    $statement->execute([
+        'id_user' => $id_user,
+        'tg' => $tg,
+        'vk' => $vk,
+        'inst' => $inst,
+    ]);
+}
