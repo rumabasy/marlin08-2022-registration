@@ -17,6 +17,10 @@ if (get_id_by_email($_POST['email'])){
     save_into_common_infa($_POST);
     save_avatar_into_media($_FILES, $_SESSION['id']);
     save_socials($_POST);
+    save_status($_POST);
+    $_SESSION['success']="данные успешно записаны ";
+    redirect_to('users.php');
+    exit;
 }
 
 
