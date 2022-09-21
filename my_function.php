@@ -27,6 +27,14 @@ function get_id_by_email($email){
     $result = $statement->fetch(PDO::FETCH_ASSOC);
     return $result['id'];
 }
+function get_role_by_email($email){
+    global $pdo;
+    $sql = "SELECT role FROM users WHERE email=:email";
+    $statement=$pdo->prepare($sql);
+    $statement->execute(['email'=>$email]);
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+    return $result['role'];
+}
 
 function get_pass_by_id($id){
     global $pdo;
@@ -105,7 +113,7 @@ function save_into_common_infa($post){
     if($post['tags']) $tags=$post['tags']; else $tags="no";
     if($post['work_space']) $work_space=$post['work_space']; else $work_space="no";
     if($post['phone']) $phone=$post['phone']; else $phone="no";
-    if($post['mailto']) $mailto=$post['mailto']; else $mailto="no";
+    if($post['email']) $mailto=$post['email']; else $mailto="no";
     if($post['address']) $address=$post['address']; else $address="no";
 
     $sql = "INSERT INTO common_infa (name, id_user, tags, work_space, phone, mailto, address) VALUES(:name, :id_user, :tags, :work_space, :phone, :mailto, :address)";
@@ -147,4 +155,33 @@ function save_status($post){
         'id_user'=> $id_user,
         'status' => $status,
     ]);
+}
+
+function get_status(){
+    global $pdo;
+    $sql="SELECT * FROM status ";
+    $statement = $pdo->query($sql);
+    return $result=$statement->fetchAll(PDO::FETCH_ASSOC);
+
+}
+function get_media(){
+    global $pdo;
+    $sql="SELECT * FROM media ";
+    $statement = $pdo->query($sql);
+    return $result=$statement->fetchAll(PDO::FETCH_ASSOC);
+
+}
+function get_socials(){
+    global $pdo;
+    $sql="SELECT * FROM socials ";
+    $statement = $pdo->query($sql);
+    return $result=$statement->fetchAll(PDO::FETCH_ASSOC);
+
+}
+function get_common_infa(){
+    global $pdo;
+    $sql="SELECT * FROM common_infa ";
+    $statement = $pdo->query($sql);
+    return $result=$statement->fetchAll(PDO::FETCH_ASSOC);
+
 }

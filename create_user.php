@@ -44,6 +44,7 @@
                     <?php echo $_SESSION['danger'] ?>
                 </div>
             <?php unset($_SESSION['danger']); endif; ?>
+        
         <form action="handler_create_user.php" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-xl-6">
