@@ -164,6 +164,24 @@ function get_status(){
     return $result=$statement->fetchAll(PDO::FETCH_ASSOC);
 
 }
+function get_status_by_id_user($comm){
+    global $pdo;
+    $id=$comm['id_user'];
+    $sql="SELECT status2 FROM status WHERE id_user=$id";
+    $statement = $pdo->query($sql);
+    $result=$statement->fetch(PDO::FETCH_ASSOC);
+    return $result['status2'];
+
+}
+function get_avatar_by_id_user($comm){
+    global $pdo;
+    $id=$comm['id_user'];
+    $sql="SELECT img FROM media WHERE id_user=$id";
+    $statement = $pdo->query($sql);
+    $result=$statement->fetch(PDO::FETCH_ASSOC);
+    return $result['img'];
+
+}
 function get_media(){
     global $pdo;
     $sql="SELECT * FROM media ";
