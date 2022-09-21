@@ -74,12 +74,16 @@ function login($name,$pass){
 }
 
 function save_avatar_into_media($img, $id){
-    //запись медиа-данных, статуса и нового имени картинки аватара в таблицу media
-    $extension = pathinfo($img["image"]['name'], PATHINFO_EXTENSION);
-	$name = uniqid().'.'.$extension;
-    //создание нового имени со старым расширением
-	move_uploaded_file($img["image"]['tmp_name'], "uploads/".$name);
-    //запись файла с новым именем в uploads
+    if(!$img["image"]['name']){
+        $name='no';
+    } else{
+        //запись медиа-данных, статуса и нового имени картинки аватара в таблицу media
+        $extension = pathinfo($img["image"]['name'], PATHINFO_EXTENSION);
+        $name = uniqid().'.'.$extension;
+        //создание нового имени со старым расширением
+        move_uploaded_file($img["image"]['tmp_name'], "uploads/".$name);
+        //запись файла с новым именем в uploads
+    }
     $id_user=$id;
     global $pdo;
 	$sql = "INSERT INTO media (img, id_user) VALUES (:img, :id_user)";
