@@ -95,7 +95,7 @@ function save_avatar_into_media($img, $id){
 
 function save_into_common_infa($post){
     global $pdo;
-    
+
     $id_user = $_SESSION['id'];
     if($post['username']) $name=$post['username'] else $name="no";
     if($post['tags']) $tags=$post['tags'] else $tags="no";
@@ -120,9 +120,9 @@ function save_into_common_infa($post){
 function save_socials($post){
     global $pdo;
     $id_user= $_SESSION['id'];
-    $vk=$post['vk'];
-    $tg=$post['t_g'];
-    $inst=$post['inst_g'];
+    if($post['vk']) $vk=$post['vk'] else $vk="no";
+    if($post['t_g']) $tg=$post['t_g'] else $tg="no";
+    if($post['inst_g']) $inst=$post['inst_g'] else $inst="no";
     $sql = "INSERT INTO socials (id_user, vk, tg, inst) VALUES(:id_user, :tg, :vk, :inst)";
     $statement = $pdo->prepare($sql);
     $statement->execute([
