@@ -72,6 +72,7 @@ require 'my_function.php' ?>
                 // dump($status);
                 $media=get_media();
                 $socials=get_socials();
+                // dump($socials);
                 ?>
                 <?php $n=0?>
                 <?php foreach($common as $comm): ?>
@@ -126,13 +127,14 @@ require 'my_function.php' ?>
                                 <address class="fs-sm fw-400 mt-4 text-muted">
                                     <i class="fas fa-map-pin mr-2"></i> <?php echo $comm['address'] ?></address>
                                 <div class="d-flex flex-row">
-                                    <a href="javascript:void(0);" class="mr-2 fs-xxl" style="color:#4680C2">
+                                <?php $socials=get_socials_by_id($comm);?>
+                                    <a href="https://id.vk.com/auth?app_id=<?php echo $socials['vk']?>" class="mr-2 fs-xxl" style="color:#4680C2">
                                         <i class="fab fa-vk"></i>
                                     </a>
-                                    <a href="javascript:void(0);" class="mr-2 fs-xxl" style="color:#38A1F3">
+                                    <a href="https://web.telegram.org/z/#-<?php echo $socials['tg']?>" class="mr-2 fs-xxl" style="color:#38A1F3">
                                         <i class="fab fa-telegram"></i>
                                     </a>
-                                    <a href="javascript:void(0);" class="mr-2 fs-xxl" style="color:#E1306C">
+                                    <a href="https://hipolink.me/example-<?php echo $socials['inst']?>" class="mr-2 fs-xxl" style="color:#E1306C">
                                         <i class="fab fa-instagram"></i>
                                     </a>
                                 </div>

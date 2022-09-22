@@ -135,7 +135,7 @@ function save_socials($post){
     if($post['vk']) $vk=$post['vk']; else $vk="no";
     if($post['t_g']) $tg=$post['t_g']; else $tg="no";
     if($post['inst_g']) $inst=$post['inst_g']; else $inst="no";
-    $sql = "INSERT INTO socials (id_user, vk, tg, inst) VALUES(:id_user, :tg, :vk, :inst)";
+    $sql = "INSERT INTO socials (id_user, vk, tg, inst) VALUES(:id_user, :vk, :tg, :inst)";
     $statement = $pdo->prepare($sql);
     $statement->execute([
         'id_user' => $id_user,
@@ -182,6 +182,14 @@ function get_avatar_by_id_user($comm){
     return $result['img'];
 
 }
+function get_socials_by_id($comm){
+    global $pdo;
+    $id=$comm['id_user'];
+    $sql="SELECT * FROM socials WHERE id_user=$id";
+    $statement = $pdo->query($sql);
+    return $result=$statement->fetch(PDO::FETCH_ASSOC);
+}
+
 function get_media(){
     global $pdo;
     $sql="SELECT * FROM media ";
