@@ -128,6 +128,23 @@ function save_into_common_infa($post){
         'address' => $address,
     ]);
 }
+function edit_common_infa_by_id($post, $id){
+    global $pdo;
+    $id_user = $id;
+    $name=$post['username']; 
+    $work_space=$post['work_space'];
+    $phone=$post['phone'];
+    $address=$post['address'];
+    $sql = "UPDATE `common_infa` SET `name` = :name, `work_space` = :work_space, `phone` = :phone, `address` = :address WHERE `id_user`= :id_user";
+    $statement = $pdo->prepare($sql);
+    $statement->execute([
+        'name' => $name,
+        'work_space' => $work_space,
+        'phone' => $phone,
+        'address' => $address,
+        'id_user' => $id_user,
+    ]);
+}
 
 function save_socials($post){
     global $pdo;
@@ -186,6 +203,13 @@ function get_socials_by_id($comm){
     global $pdo;
     $id=$comm['id_user'];
     $sql="SELECT * FROM socials WHERE id_user=$id";
+    $statement = $pdo->query($sql);
+    return $result=$statement->fetch(PDO::FETCH_ASSOC);
+}
+function get_common_infa_by_id($comm){
+    global $pdo;
+    $id=$comm;
+    $sql="SELECT * FROM common_infa WHERE id_user=$id";
     $statement = $pdo->query($sql);
     return $result=$statement->fetch(PDO::FETCH_ASSOC);
 }
