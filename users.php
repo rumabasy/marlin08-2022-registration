@@ -69,10 +69,10 @@ require 'my_function.php' ?>
                 <?php //скачать массив socials,common_infa,media из бд?>
                 <?php 
                 $common=get_common_infa();
-                $status=get_status();
+                // $status=get_status();
                 // dump($status);
-                $media=get_media();
-                $socials=get_socials();
+                // $media=get_media();
+                // $socials=get_socials();
                 // dump($socials);
                 ?>
                 <?php $n=0?>
