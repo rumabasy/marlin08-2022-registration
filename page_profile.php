@@ -1,3 +1,17 @@
+<?php 
+session_start(); 
+require 'my_function.php';
+$common=get_common_infa_by_id($_GET['id']);
+dump($common,6);
+// echo $status=get_status_by_id_user($_common);
+// dump($status,6);
+// dump($status);
+// $media=get_avatar_by_id_user($_common);
+// dump($media,6);
+$socials=get_socials_by_id($_common);
+dump($socials);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

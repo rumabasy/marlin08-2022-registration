@@ -6,6 +6,6 @@ require 'my_function.php';
 
 edit_common_infa_by_id($_POST, $_SESSION['id']);
 
-set_sess_mess('success', 'Данные успешно изменены');
+set_sess_mess('success', 'Данные успешно изменены2');
 
 redirect_to('users.php');
