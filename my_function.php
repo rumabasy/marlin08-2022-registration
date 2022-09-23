@@ -145,6 +145,19 @@ function edit_common_infa_by_id($post, $id){
         'id_user' => $id_user,
     ]);
 }
+function edit_user($id,$post){
+    global $pdo;
+    $id_user = $id;
+    $email=$post['email'];
+    $pass=$post['pass'];
+    $sql = "UPDATE `users` SET `email` = :email, `password` = :pass WHERE `id_user`= :id_user";
+    $statement = $pdo->prepare($sql);
+    $statement->execute([
+        'email' => $email,
+        'pass' => $pass,
+        'id_user' => $id_user,
+    ]);
+}
 
 function save_socials($post){
     global $pdo;
@@ -233,5 +246,10 @@ function get_common_infa(){
     $sql="SELECT * FROM common_infa ";
     $statement = $pdo->query($sql);
     return $result=$statement->fetchAll(PDO::FETCH_ASSOC);
-
+}
+function get_email_by_id($id){
+    global $pdo;
+    $sql="SELECT email FROM users WHERE id=$id ";
+    $statement = $pdo->query($sql);
+    return $result=$statement->fetch(PDO::FETCH_ASSOC);
 }
