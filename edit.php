@@ -1,8 +1,6 @@
 <?php  
 session_start();
 require "my_function.php";
-// dump($_GET, 5);
-// dump($_SESSION);
 
 if($_GET['id']==$_SESSION['id'] or $_SESSION['role']=='admin') {
     $common_infa=get_common_infa_by_id($_GET['id']);
@@ -10,10 +8,6 @@ if($_GET['id']==$_SESSION['id'] or $_SESSION['role']=='admin') {
     set_sess_mess('danger', 'Авторизуйтесь');
     redirect_to('page_login.php');
 }
-
-// dump($common_infa);
-
-
 
 ?>
 <!DOCTYPE html>
