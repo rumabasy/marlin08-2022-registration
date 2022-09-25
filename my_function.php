@@ -150,11 +150,11 @@ function edit_user($id,$post){
     $id_user = $id;
     $email=$post['email'];
     $pass=$post['pass'];
-    $sql = "UPDATE `users` SET `email` = :email, `password` = :pass WHERE `id_user`= :id_user";
+    $sql = "UPDATE `users` SET `email` = :email, `password` = :pass WHERE `id`= :id_user";
     $statement = $pdo->prepare($sql);
     $statement->execute([
         'email' => $email,
-        'pass' => $pass,
+        'pass' => password_hash($pass, PASSWORD_DEFAULT),
         'id_user' => $id_user,
     ]);
 }
@@ -180,6 +180,17 @@ function save_status($post){
     $id_user=$_SESSION['id'];
     $status=$post['status'];
     $sql = "INSERT INTO status (id_user, status) VALUES(:id_user, :status)";
+    $statement=$pdo->prepare($sql);
+    $statement->execute([
+        'id_user'=> $id_user,
+        'status' => $status,
+    ]);
+}
+function edit_status($id, $post){
+    global $pdo;
+    $id_user=$id];
+    $status=$post['status'];
+    $sql = "UPDATE status SET status=:status WHERE id_user=:id_user)";
     $statement=$pdo->prepare($sql);
     $statement->execute([
         'id_user'=> $id_user,
