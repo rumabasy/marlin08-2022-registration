@@ -1,22 +1,13 @@
 <?php 
 session_start();
 require 'my_function.php';
-// dump($_GET['id'],4);
 
-if ($_SESSION['id']==$_GET['id'] or $_SESSION['role']=='admin'){
-    $mail = get_email_by_id($_GET['id']);
-} else {
-    redirect_to('handler_exit.php');
-    set_sess_mess('danger', 'АВторизуйтесь');
-    exit;
-};    
-// dump($mail);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Безопаность</title>
+    <title>Document</title>
     <meta name="description" content="Chartist.html">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
@@ -48,45 +39,34 @@ if ($_SESSION['id']==$_GET['id'] or $_SESSION['role']=='admin'){
     <main id="js-page-content" role="main" class="page-content mt-3">
         <div class="subheader">
             <h1 class="subheader-title">
-                <i class='subheader-icon fal fa-lock'></i> Безопасность
+                <i class='subheader-icon fal fa-sun'></i> Установить статус
             </h1>
 
         </div>
-        <form action="handler_security.php?id=<?php echo $_GET['id'] ?>" method="post" >
+        <form action="handler_status.php" method="post">
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
                         <div class="panel-container">
-                        <?php if($_SESSION['danger']) : ?>
-                            <div class="alert alert-danger">
-                                <?php echo $_SESSION['danger'] ?>
-                            </div>
-                        <?php unset($_SESSION['danger']); endif; ?>
                             <div class="panel-hdr">
-                                <h2>Обновление эл. адреса и пароля</h2>
+                                <h2>Установка текущего статуса</h2>
                             </div>
                             <div class="panel-content">
-                                <!-- email -->
-                                <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Email</label>
-                                    <input type="text" id="simpleinput" class="form-control" name="email" value="<?php echo $mail['email'] ?>">
-                                </div>
-
-                                <!-- password -->
-                                <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Пароль</label>
-                                    <input type="password" id="simpleinput" class="form-control" name='pass'>
-                                </div>
-
-                                <!-- password confirmation-->
-                                <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Подтверждение пароля</label>
-                                    <input type="password" id="simpleinput" class="form-control" name="pass2">
-                                </div>
-
-
-                                <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                    <button class="btn btn-warning" type="submit">Изменить</button>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <!-- status -->
+                                        <div class="form-group">
+                                            <label class="form-label" for="example-select">Выберите статус</label>
+                                            <select class="form-control" id="example-select">
+                                                <option>Онлайн</option>
+                                                <option >Отошел</option>
+                                                <option selected>Не беспокоить</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mt-3 d-flex flex-row-reverse">
+                                        <button class="btn btn-warning">Set Status</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
