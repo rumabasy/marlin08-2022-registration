@@ -188,9 +188,9 @@ function save_status($post){
 }
 function edit_status($id, $post){
     global $pdo;
-    $id_user=$id];
+    $id_user= $id;
     $status=$post['status'];
-    $sql = "UPDATE status SET status=:status WHERE id_user=:id_user)";
+    $sql = "UPDATE `status` SET `status` = :status WHERE `id_user`=:id_user";
     $statement=$pdo->prepare($sql);
     $statement->execute([
         'id_user'=> $id_user,
@@ -212,6 +212,14 @@ function get_status_by_id_user($comm){
     $statement = $pdo->query($sql);
     $result=$statement->fetch(PDO::FETCH_ASSOC);
     return $result['status2'];
+
+}
+function get_stat_by_id_user($id){
+    global $pdo;
+    $sql="SELECT status FROM status WHERE id_user=$id";
+    $statement = $pdo->query($sql);
+    $result=$statement->fetch(PDO::FETCH_ASSOC);
+    return $result['status'];
 
 }
 function get_avatar_by_id_user($comm){

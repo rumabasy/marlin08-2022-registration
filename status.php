@@ -1,7 +1,9 @@
 <?php 
 session_start();
 require 'my_function.php';
-
+// dump($_SESSION,2);
+$stat=get_stat_by_id_user($_SESSION['id']);
+// dump($stat);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,16 +58,22 @@ require 'my_function.php';
                                     <div class="col-md-4">
                                         <!-- status -->
                                         <div class="form-group">
-                                            <label class="form-label" for="example-select">Выберите статус</label>
-                                            <select class="form-control" id="example-select">
-                                                <option>Онлайн</option>
-                                                <option >Отошел</option>
-                                                <option selected>Не беспокоить</option>
+                                            <?php $option=[
+                                                'online' =>'Онлайн',
+                                                'away' =>'Отошел',
+                                                'no_disturb' =>'Не беспокоить',
+                                            ];?>
+                                            <label class="form-label" 
+                                            for="example-select">Выберите статус</label>
+                                            <select class="form-control" id="example-select" name="status">
+                                                <?php foreach($option as $opt => $ion): ?>
+                                                <option <?php if($stat==$ion) echo'selected'?>><?php echo $ion ?></option>
+                                                <?php endforeach ?>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                        <button class="btn btn-warning">Set Status</button>
+                                        <button class="btn btn-warning" type="submit">Set Status</button>
                                     </div>
                                 </div>
                             </div>
