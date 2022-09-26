@@ -110,7 +110,7 @@ require 'my_function.php' ?>
                                             <i class="fa fa-camera"></i>
                                             Загрузить аватар
                                         </a>
-                                        <a href="delete.php?id=<?php echo $comm['id_user'] ?>" class="dropdown-item" onclick="return confirm('are you sure?');">
+                                        <a href="handler_delete.php?id=<?php echo $comm['id_user'] ?>" class="dropdown-item" onclick="return confirm('are you sure?');">
                                             <i class="fa fa-window-close"></i>
                                             Удалить
                                         </a>
