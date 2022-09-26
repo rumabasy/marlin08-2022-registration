@@ -47,7 +47,7 @@ if($avatar=='no'){
             </h1>
 
         </div>
-        <form action="handler_media.php" method="post" enctype="multipart/form-data">
+        <form action="handler_media.php?id_user=<?php echo $_GET['id_user'] ?>" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
