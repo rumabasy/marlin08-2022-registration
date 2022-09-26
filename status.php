@@ -2,6 +2,11 @@
 session_start();
 require 'my_function.php';
 // dump($_SESSION,2);
+if($_SESSION['id']!=$_GET['id']){
+    set_sess_mess('danger', 'Авторизуйтесь как этот пользователь чтобы изменить статус');
+    redirect_to('users.php');
+    exit;    
+}
 $stat=get_stat_by_id_user($_SESSION['id']);
 // dump($stat);
 ?>

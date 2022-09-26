@@ -36,12 +36,17 @@ require 'my_function.php' ?>
         </nav>
 
         <main id="js-page-content" role="main" class="page-content mt-3">
-        <?php if($_SESSION['success']) : ?>
+            <?php if($_SESSION['success']) : ?>
                 <div class="alert alert-success">
                     <?php echo $_SESSION['success'] ?>
-                    Профиль успешно обновлен.
+                    <br>Профиль обновлен.
                 </div>
             <?php unset($_SESSION['success']); endif; ?>
+            <?php if($_SESSION['danger']) : ?>
+                <div class="alert alert-danger">
+                    <?php echo $_SESSION['danger'] ?>
+                </div>
+            <?php unset($_SESSION['danger']); endif; ?>
             <div class="subheader">
                 <h1 class="subheader-title">
                     <i class='subheader-icon fal fa-users'></i> Список пользователей
