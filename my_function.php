@@ -81,6 +81,33 @@ function login($name,$pass){
     }
 }
 
+function edit_avatar_into_media($img, $id){
+    if(!$img["image"]['name']){
+        $name='no';
+    } else {
+        //запись медиа-данных, статуса и нового имени картинки аватара в таблицу media
+        $extension = pathinfo($img["image"]['name'], PATHINFO_EXTENSION);
+        $name = uniqid().'.'.$extension;
+        //создание нового имени со старым расширением
+        move_uploaded_file($img["image"]['tmp_name'], "uploads/".$name);
+        //запись файла с новым именем в uploads
+    }
+    $id_user=$id; //exit;
+    global $pdo;
+	$sql = "UPDATE `media` SET `img` = :image WHERE `id_user` = :id_user";
+	$statement = $pdo->prepare($sql);
+	$statement->bindparam(":image", $name);
+	$statement->bindparam(":id_user", $id_user);
+	$statement->execute([
+        "image" => $name,
+        'id_user' => $id_user,
+    ]);
+    //запись имени и id в бд
+}
+
+function delete_old_avatar_from_uploads($old_name){
+    if($old_name !='no') unlink("uploads/".$old_name);
+}
 function save_avatar_into_media($img, $id){
     if(!$img["image"]['name']){
         $name='no';
@@ -220,6 +247,14 @@ function get_stat_by_id_user($id){
     $statement = $pdo->query($sql);
     $result=$statement->fetch(PDO::FETCH_ASSOC);
     return $result['status'];
+
+}
+function get_avatar_by_id_user2($id){
+    global $pdo;
+    $sql="SELECT img FROM media WHERE id_user=$id";
+    $statement = $pdo->query($sql);
+    $result=$statement->fetch(PDO::FETCH_ASSOC);
+    return $result['img'];
 
 }
 function get_avatar_by_id_user($comm){

@@ -106,7 +106,7 @@ require 'my_function.php' ?>
                                         <a class="dropdown-item" href="status.php?id=<?php echo $comm['id_user'] ?>">
                                             <i class="fa fa-sun"></i>
                                         Установить статус</a>
-                                        <a class="dropdown-item" href="media.php?id=<?php echo $comm['id_user'] ?>">
+                                        <a class="dropdown-item" href="media.php?id_user=<?php echo $comm['id_user'] ?>">
                                             <i class="fa fa-camera"></i>
                                             Загрузить аватар
                                         </a>
