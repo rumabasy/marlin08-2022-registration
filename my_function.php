@@ -307,3 +307,22 @@ function get_email_by_id($id){
     $statement = $pdo->query($sql);
     return $result=$statement->fetch(PDO::FETCH_ASSOC);
 }
+
+function delete_user_by_id($id){
+    global $pdo;
+    $sql="DELETE FROM media WHERE id_user = $id";
+    $statement=$pdo->prepare($sql);
+    $statement->execute();
+    $sql="DELETE FROM socials WHERE id_user = $id";
+    $statement=$pdo->prepare($sql);
+    $statement->execute();
+    $sql="DELETE FROM status WHERE id_user = $id";
+    $statement=$pdo->prepare($sql);
+    $statement->execute();
+    $sql="DELETE FROM common_infa WHERE id_user = $id";
+    $statement=$pdo->prepare($sql);
+    $statement->execute();
+    $sql="DELETE FROM users WHERE id = $id";
+    $statement=$pdo->prepare($sql);
+    $statement->execute();
+}
