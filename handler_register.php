@@ -4,8 +4,6 @@ require "my_function.php";
 $email = $_POST['email'];
 $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-$pdo = new PDO("mysql:host=localhost;dbname=marlin","root" , "");
-
 $result= get_id_by_email($email);
 
 if($result){
@@ -16,7 +14,11 @@ if($result){
 
 add_user($email,$password);
 
-set_sess_mess('success', 'Регистрация успешна' );
+$result= get_id_by_email($email);
+
+save_into_common_infa($_POST);
+
+set_sess_mess('success', 'Регистрация успешна4' );
 
 redirect_to('page_login.php');
 

@@ -1,5 +1,7 @@
 <?php session_start();
-require 'my_function.php' ?>
+require 'my_function.php' ;
+// dump($_SESSION,8);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

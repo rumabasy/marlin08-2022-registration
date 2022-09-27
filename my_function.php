@@ -106,8 +106,9 @@ function edit_avatar_into_media($img, $id){
 }
 
 function delete_old_avatar_from_uploads($old_name){
-    if($old_name !='no') unlink("uploads/".$old_name);
+    if(is_link("uploads/".$old_name)) unlink("uploads/".$old_name);
 }
+
 function save_avatar_into_media($img, $id){
     if(!$img["image"]['name']){
         $name='no';
@@ -135,7 +136,7 @@ function save_avatar_into_media($img, $id){
 function save_into_common_infa($post){
     global $pdo;
 
-    $id_user = $_SESSION['id'];
+    $id_user = get_id_by_email($post['email']);
     if($post['username']) $name=$post['username']; else $name="no";
     if($post['tags']) $tags=$post['tags']; else $tags="no";
     if($post['work_space']) $work_space=$post['work_space']; else $work_space="no";
