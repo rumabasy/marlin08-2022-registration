@@ -137,12 +137,12 @@ function save_into_common_infa($post){
     global $pdo;
 
     $id_user = get_id_by_email($post['email']);
-    if($post['username']) $name=$post['username']; else $name="no";
-    if($post['tags']) $tags=$post['tags']; else $tags="no";
-    if($post['work_space']) $work_space=$post['work_space']; else $work_space="no";
-    if($post['phone']) $phone=$post['phone']; else $phone="no";
+    if($post['username']) $name=$post['username']; else $name="username";
+    if($post['tags']) $tags=$post['tags']; else $tags="username";
+    if($post['work_space']) $work_space=$post['work_space']; else $work_space="work_space";
+    if($post['phone']) $phone=$post['phone']; else $phone="no phone";
     if($post['email']) $mailto=$post['email']; else $mailto="no";
-    if($post['address']) $address=$post['address']; else $address="no";
+    if($post['address']) $address=$post['address']; else $address="no address";
 
     $sql = "INSERT INTO common_infa (name, id_user, tags, work_space, phone, mailto, address) VALUES(:name, :id_user, :tags, :work_space, :phone, :mailto, :address)";
     $statement = $pdo->prepare($sql);
@@ -156,8 +156,23 @@ function save_into_common_infa($post){
         'address' => $address,
     ]);
 }
+
+function get_id_user_by_email_in_common_infa($email){
+    //
+    global $pdo;
+    $sql="SELECT id_user FROM common_infa WHERE mailto =:email";
+    $statement=$pdo->prepare($sql);
+    $statement->execute(['email'=> $email]);
+    $email=$statement->fetch(PDO::FETCH_ASSOC);
+    return $email['id_user'];
+
+}
 function edit_common_infa_by_id($post, $id){
     global $pdo;
+    if($id_user=get_id_user_by_email_in_common_infa($post['email'])!=''){
+        save_into_common_infa($post);
+        return;
+    }
     $id_user = $id;
     $name=$post['username']; 
     $work_space=$post['work_space'];
@@ -203,9 +218,9 @@ function save_socials($post){
     ]);
 }
 
-function save_status($post){
+function save_status($post,$id){
     global $pdo;
-    $id_user=$_SESSION['id'];
+    $id_user=$id;
     $status=$post['status'];
     $sql = "INSERT INTO status (id_user, status) VALUES(:id_user, :status)";
     $statement=$pdo->prepare($sql);

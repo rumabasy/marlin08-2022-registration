@@ -50,7 +50,6 @@ if($_GET['id']==$_SESSION['id'] or $_SESSION['role']=='admin') {
             </h1>
 
         </div>
-        <!-- <?php  display_sess_mess('success')?> -->
         <form action="handler_edit.php?id=<?php echo $_GET['id'] ?>" method="post">
             <div class="row">
                 <div class="col-xl-6">

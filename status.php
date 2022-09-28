@@ -50,7 +50,7 @@ $stat=get_stat_by_id_user($_SESSION['id']);
             </h1>
 
         </div>
-        <form action="handler_status.php" method="post">
+        <form action="handler_status.php?id=<?php echo $_GET['id'] ?>" method="post">
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
