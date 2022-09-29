@@ -73,15 +73,8 @@ require 'my_function.php' ;
             </div>
             <div class="row" id="js-contacts">
                 <?php //скачать массив socials,common_infa,media из бд?>
-                <?php 
-                $common=get_common_infa();
-                // $status=get_status();
-                // dump($status);
-                // $media=get_media();
-                // $socials=get_socials();
-                // dump($socials);
-                ?>
-                <?php $n=0?>
+                <?php                 $common=get_common_infa();                ?>
+                <!-- <?php $n=0?> -->
                 <?php foreach($common as $comm): ?>
                 <div class="col-xl-4">
                     <div id="c_<?php echo $comm['id_user'] ?>" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="<?php echo $comm['tags'] ?>">
@@ -134,7 +127,7 @@ require 'my_function.php' ;
                                 <address class="fs-sm fw-400 mt-4 text-muted">
                                     <i class="fas fa-map-pin mr-2"></i> <?php echo $comm['address'] ?></address>
                                 <div class="d-flex flex-row">
-                                <?php $socials=get_socials_by_id($comm);?>
+                                <?php $socials=get_socials_by_id($comm['id_user']);?>
                                     <a href="https://id.vk.com/auth?app_id=<?php echo $socials['vk']?>" class="mr-2 fs-xxl" style="color:#4680C2">
                                         <i class="fab fa-vk"></i>
                                     </a>

@@ -14,7 +14,7 @@ function add_user($email,$password){
     // создать пустые записи в common_infa, media, status, socials
     $id=get_id_by_email($email);
     save_into_common_infa($_POST);
-    save_avatar_into_media($img, $id);
+    save_avatar_into_media($id);
     save_socials($_POST);
     save_status($_POST, $id);
 }
@@ -56,11 +56,11 @@ function dump($data, $stop=1){
     if($stop==1) die;
 }
 
-function edit_avatar_into_media($img, $id){
-    $res=get_avatar_by_id_user2($id);
+function edit_avatar_into_media($files, $id){
+    $old_img=get_avatar_by_id_user2($id);
     // dump($res);
-    if(!$img["image"]['name']){
-        $name=$res;
+    if(!$files["image"]['name']){
+        $name=$old_img;
     } else {
         //запись медиа-данных, статуса и нового имени картинки аватара в таблицу media
         $extension = pathinfo($img["image"]['name'], PATHINFO_EXTENSION);
@@ -68,6 +68,7 @@ function edit_avatar_into_media($img, $id){
         //создание нового имени со старым расширением
         move_uploaded_file($img["image"]['tmp_name'], "uploads/".$name);
         //запись файла с новым именем в uploads
+        delete_old_avatar_from_uploads($old_img);
     }
     $id_user=$id; //exit;
     global $pdo;
@@ -106,7 +107,7 @@ function edit_socials_by_id($post, $id){
 global $pdo;
 // получаем массив наших socials
 $res=get_socials_by_id($id);
-
+// dump($res);
 $id_user = $id;
 if($post['vk']=='') $vk=$res['vk']; else $vk=$post['vk'];
 if($post['t_g']=='') $tg=$res['tg']; else $tg=$post['t_g'];
@@ -159,14 +160,6 @@ function edit_user($id,$post){
     ]);    
 }    
 
-function get_id_by_email($email){
-    global $pdo;
-    $sql = "SELECT id FROM users WHERE email=:email";
-    $statement=$pdo->prepare($sql);
-    $statement->execute(['email'=>$email]);
-    $result = $statement->fetch(PDO::FETCH_ASSOC);
-    return $result['id'];
-}    
 
 function get_avatar_by_id_user($comm){
     global $pdo;
@@ -184,6 +177,15 @@ function get_avatar_by_id_user2($id){
     $result=$statement->fetch(PDO::FETCH_ASSOC);
     return $result['img'];
 }
+
+function get_id_by_email($email){
+    global $pdo;
+    $sql = "SELECT id FROM users WHERE email=:email";
+    $statement=$pdo->prepare($sql);
+    $statement->execute(['email'=>$email]);
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+    return $result['id'];
+}    
 
 function get_role_by_email($email){
 
@@ -237,9 +239,8 @@ function get_stat_by_id_user($id){
     return $result['status'];
 }    
 
-function get_socials_by_id($comm){
+function get_socials_by_id($id){
     global $pdo;
-    $id=$comm;
     $sql="SELECT * FROM socials WHERE id_user=$id";
     $statement = $pdo->query($sql);
     return $result=$statement->fetch(PDO::FETCH_ASSOC);
@@ -330,17 +331,17 @@ function redirect_to($path){
 }    
  
 
-function save_avatar_into_media($img, $id){
-    if(!$img["image"]['name']){
+function save_avatar_into_media($id){
+    // if(!$img["image"]['name']){
         $name='no';
-    } else {
-        //запись медиа-данных, статуса и нового имени картинки аватара в таблицу media
-        $extension = pathinfo($img["image"]['name'], PATHINFO_EXTENSION);
-        $name = uniqid().'.'.$extension;
-        //создание нового имени со старым расширением
-        move_uploaded_file($img["image"]['tmp_name'], "uploads/".$name);
-        //запись файла с новым именем в uploads
-    }
+    // } else {
+    //     //запись медиа-данных, статуса и нового имени картинки аватара в таблицу media
+    //     $extension = pathinfo($img["image"]['name'], PATHINFO_EXTENSION);
+    //     $name = uniqid().'.'.$extension;
+    //     //создание нового имени со старым расширением
+    //     move_uploaded_file($img["image"]['tmp_name'], "uploads/".$name);
+    //     //запись файла с новым именем в uploads
+    // }
     $id_user=$id;
     global $pdo;
 	$sql = "INSERT INTO media (img, id_user) VALUES (:img, :id_user)";
@@ -351,7 +352,6 @@ function save_avatar_into_media($img, $id){
         "img" => $name,
         'id_user' => $id_user,
     ]);
-    //запись имени и id в бд
 }
 
 function save_into_common_infa($post){

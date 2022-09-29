@@ -14,7 +14,7 @@ if($login=login_bool($_POST['email'],$_POST['password'])==1){
     edit_socials_by_id($_POST, $id);
     edit_tags($_POST, $id);
     set_sess_mess('success',"Данные отредактированы");
-    redirect_to('create_user.php');
+    redirect_to('users.php');
     exit;
 } else {
     //если пары логин-пароль нет проверяем есть ли такой же логин
