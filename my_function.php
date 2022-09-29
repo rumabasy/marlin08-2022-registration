@@ -9,8 +9,14 @@ function add_user($email,$password){
     $statement = $pdo->prepare($sql);
     $statement->execute([
         'email' => $email, 
-        'password' => password_hash($_POST['password'], PASSWORD_DEFAULT)
+        'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
     ]);
+    // создать пустые записи в common_infa, media, status, socials
+    $id=get_id_by_email($email);
+    save_into_common_infa($_POST);
+    save_avatar_into_media($img, $id);
+    save_socials($_POST);
+    save_status($_POST, $id);
 }
 
 function delete_old_avatar_from_uploads($old_name){
@@ -71,30 +77,27 @@ function edit_avatar_into_media($img, $id){
         "image" => $name,
         'id_user' => $id_user,
     ]);
-    //запись имени и id в бд
 }
-}
+
 function edit_common_infa_by_id($post, $id){
-global $pdo;
-if($id_user=get_id_user_by_email_in_common_infa($post['email'])!=''){
-    save_into_common_infa($post);
-    return;
+    global $pdo;
+    
+    $id_user = $id;
+    $name=$post['username']; 
+    $work_space=$post['work_space'];
+    $phone=$post['phone'];
+    $address=$post['address'];
+    $sql = "UPDATE `common_infa` SET `name` = :name, `work_space` = :work_space, `phone` = :phone, `address` = :address WHERE `id_user`= :id_user";
+    $statement = $pdo->prepare($sql);
+    $statement->execute([
+        'name' => $name,
+        'work_space' => $work_space,
+        'phone' => $phone,
+        'address' => $address,
+        'id_user' => $id_user,
+    ]);
 }
-$id_user = $id;
-$name=$post['username']; 
-$work_space=$post['work_space'];
-$phone=$post['phone'];
-$address=$post['address'];
-$sql = "UPDATE `common_infa` SET `name` = :name, `work_space` = :work_space, `phone` = :phone, `address` = :address WHERE `id_user`= :id_user";
-$statement = $pdo->prepare($sql);
-$statement->execute([
-    'name' => $name,
-    'work_space' => $work_space,
-    'phone' => $phone,
-    'address' => $address,
-    'id_user' => $id_user,
-]);
-}
+
 function edit_socials_by_id($post, $id){
 global $pdo;
 if($id_user=get_id_user_by_email_in_common_infa($post['email'])!=''){
@@ -115,29 +118,30 @@ $statement->execute([
 ]);
 }
 
-function edit_user($id,$post){
-global $pdo;
-$id_user = $id;
-$email=$post['email'];
-$pass=$post['pass'];
-$sql = "UPDATE `users` SET `email` = :email, `password` = :pass WHERE `id`= :id_user";
-$statement = $pdo->prepare($sql);
-$statement->execute([
-    'email' => $email,
-    'pass' => password_hash($pass, PASSWORD_DEFAULT),
-    'id_user' => $id_user,
-]);
-}
 function edit_status($id, $post){
-global $pdo;
-$id_user= $id;
-$status=$post['status'];
-$sql = "UPDATE `status` SET `status` = :status WHERE `id_user`=:id_user";
-$statement=$pdo->prepare($sql);
-$statement->execute([
-    'id_user'=> $id_user,
-    'status' => $status,
-]);
+    global $pdo;
+    $id_user= $id;
+    $status=$post['status'];
+    $sql = "UPDATE `status` SET `status` = :status WHERE `id_user`=:id_user";
+    $statement=$pdo->prepare($sql);
+    $statement->execute([
+        'id_user'=> $id_user,
+        'status' => $status,
+    ]);
+    }
+
+function edit_user($id,$post){
+    global $pdo;
+    $id_user = $id;
+    $email=$post['email'];
+    $pass=$post['pass'];
+    $sql = "UPDATE `users` SET `email` = :email, `password` = :pass WHERE `id`= :id_user";
+    $statement = $pdo->prepare($sql);
+    $statement->execute([
+        'email' => $email,
+        'pass' => password_hash($pass, PASSWORD_DEFAULT),
+        'id_user' => $id_user,
+    ]);
 }
 
 function get_id_by_email($email){
@@ -148,6 +152,7 @@ function get_id_by_email($email){
     $result = $statement->fetch(PDO::FETCH_ASSOC);
     return $result['id'];
 }
+
 function get_role_by_email($email){
     global $pdo;
     $sql = "SELECT role FROM users WHERE email=:email";
@@ -165,6 +170,7 @@ function get_pass_by_id($id){
     $res = $statement->fetch(PDO::FETCH_ASSOC);
     return $res['password'];
 }    
+
 function get_common_infa_by_id2($id){
     global $pdo;
     $sql = "SELECT * FROM common_infa WHERE id_user=$id";
@@ -173,13 +179,14 @@ function get_common_infa_by_id2($id){
     $res = $statement->fetch(PDO::FETCH_ASSOC);
     return $res;
 }    
+
 function get_status(){
     global $pdo;
     $sql="SELECT * FROM status ";
     $statement = $pdo->query($sql);
     return $result=$statement->fetchAll(PDO::FETCH_ASSOC);
-
 }
+
 function get_status_by_id_user($comm){
     global $pdo;
     $id=$comm['id_user'];
@@ -187,24 +194,24 @@ function get_status_by_id_user($comm){
     $statement = $pdo->query($sql);
     $result=$statement->fetch(PDO::FETCH_ASSOC);
     return $result['status2'];
-
 }
+
 function get_stat_by_id_user($id){
     global $pdo;
     $sql="SELECT status FROM status WHERE id_user=$id";
     $statement = $pdo->query($sql);
     $result=$statement->fetch(PDO::FETCH_ASSOC);
     return $result['status'];
-
 }
+
 function get_avatar_by_id_user2($id){
     global $pdo;
     $sql="SELECT img FROM media WHERE id_user=$id";
     $statement = $pdo->query($sql);
     $result=$statement->fetch(PDO::FETCH_ASSOC);
     return $result['img'];
-
 }
+
 function get_avatar_by_id_user($comm){
     global $pdo;
     $id=$comm['id_user'];
@@ -212,8 +219,8 @@ function get_avatar_by_id_user($comm){
     $statement = $pdo->query($sql);
     $result=$statement->fetch(PDO::FETCH_ASSOC);
     return $result['img'];
-
 }
+
 function get_socials_by_id($comm){
     global $pdo;
     $id=$comm['id_user'];
@@ -221,6 +228,7 @@ function get_socials_by_id($comm){
     $statement = $pdo->query($sql);
     return $result=$statement->fetch(PDO::FETCH_ASSOC);
 }
+
 function get_common_infa_by_id($comm){
     global $pdo;
     $id=$comm;
@@ -234,48 +242,20 @@ function get_media(){
     $sql="SELECT * FROM media ";
     $statement = $pdo->query($sql);
     return $result=$statement->fetchAll(PDO::FETCH_ASSOC);
-
 }
-function get_socials(){
-    global $pdo;
-    $sql="SELECT * FROM socials ";
-    $statement = $pdo->query($sql);
-    return $result=$statement->fetchAll(PDO::FETCH_ASSOC);
 
-}
 function get_common_infa(){
     global $pdo;
     $sql="SELECT * FROM common_infa ";
     $statement = $pdo->query($sql);
     return $result=$statement->fetchAll(PDO::FETCH_ASSOC);
 }
+
 function get_email_by_id($id){
     global $pdo;
     $sql="SELECT email FROM users WHERE id=$id ";
     $statement = $pdo->query($sql);
     return $result=$statement->fetch(PDO::FETCH_ASSOC);
-}
-
-
-function login($name,$pass){
-    $id=get_id_by_email($name);
-    if(!$id){
-        set_sess_mess('danger','Такого логина в базе нет');
-        redirect_to('page_login.php');
-        exit;
-    } else {
-        $hash= get_pass_by_id($id);
-        $check= password_verify($_POST['password'], $hash);
-        if(!$check){
-            set_sess_mess('danger','Логин и пароль не совпадают');
-            redirect_to('page_login.php');
-            exit;
-        } 
-        else {
-            // redirect_to('users.php');
-            return $check;
-        }
-    }
 }
 
 function get_id_user_by_email_in_common_infa($email){
@@ -287,13 +267,39 @@ function get_id_user_by_email_in_common_infa($email){
     return $email['id_user'];
 }
 
+function get_socials(){
+    global $pdo;
+    $sql="SELECT * FROM socials ";
+    $statement = $pdo->query($sql);
+    return $result=$statement->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function login($name,$pass){
+    $id=get_id_by_email($name);
+    if(!$id){
+        set_sess_mess('danger','Такого логина в базе нет');
+        redirect_to('page_login.php');
+        exit;
+    } else {
+        $hash= get_pass_by_id($id);
+        $check= password_verify($_POST['password'], $hash);
+        if(!$check){
+            set_sess_mess('danger','Логин и пароль!= f(login');
+            redirect_to('page_login.php');
+            exit;
+        } 
+        else {
+            // redirect_to('users.php');
+            return $check;
+        }
+    }
+}
+
+
 function redirect_to($path){
     header("Location: ".$path);
 }    
  
-function set_sess_mess($alert, $text){
-    return $_SESSION[$alert] = $text;
-}    
 
 function save_avatar_into_media($img, $id){
     if(!$img["image"]['name']){
@@ -318,7 +324,6 @@ function save_avatar_into_media($img, $id){
     ]);
     //запись имени и id в бд
 }
-
 
 function save_into_common_infa($post){
     global $pdo;
@@ -372,4 +377,6 @@ function save_status($post,$id){
     ]);
 }
 
-
+    function set_sess_mess($alert, $text){
+        return $_SESSION[$alert] = $text;
+    }    

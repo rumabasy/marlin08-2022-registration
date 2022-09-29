@@ -14,11 +14,7 @@ if($result){
 
 add_user($email,$password);
 
-$result= get_id_by_email($email);
-
-save_into_common_infa($_POST);
-
-set_sess_mess('success', 'Регистрация успешна4' );
+set_sess_mess('success', 'Регистрация ok(h_register)' );
 
 redirect_to('page_login.php');
 

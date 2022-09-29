@@ -39,12 +39,17 @@
                 <i class='subheader-icon fal fa-plus-circle'></i> Добавить пользователя
             </h1>
         </div>
-        <?php if($_SESSION['danger']) : ?>
+        <?php 
+            if($_SESSION['success']) : ?>
+                <div class="alert alert-success">
+                    <?php echo $_SESSION['success'] ?>
+                </div>
+            <?php unset($_SESSION['success']); endif; ?>
+            <?php if($_SESSION['danger']) : ?>
                 <div class="alert alert-danger">
                     <?php echo $_SESSION['danger'] ?>
                 </div>
             <?php unset($_SESSION['danger']); endif; ?>
-        
         <form action="handler_create_user.php" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-xl-6">
