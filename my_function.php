@@ -57,8 +57,10 @@ function dump($data, $stop=1){
 }
 
 function edit_avatar_into_media($img, $id){
+    $res=get_avatar_by_id_user2($id);
+    // dump($res);
     if(!$img["image"]['name']){
-        $name='no';
+        $name=$res;
     } else {
         //запись медиа-данных, статуса и нового имени картинки аватара в таблицу media
         $extension = pathinfo($img["image"]['name'], PATHINFO_EXTENSION);
@@ -81,12 +83,14 @@ function edit_avatar_into_media($img, $id){
 
 function edit_common_infa_by_id($post, $id){
     global $pdo;
-    
+    //получить данные из таблицы с етим id
+    $res=get_common_infa_by_id($id);
     $id_user = $id;
-    $name=$post['username']; 
-    $work_space=$post['work_space'];
-    $phone=$post['phone'];
-    $address=$post['address'];
+    //сравнить и присвоить значения тем которые неравны ''
+    if($post['username']=='') $name=$res['name']; else $name=$post['username']; 
+    if($post['work_space']=='') $work_space=$res['work_space']; else $work_space=$post['work_space']; 
+    if($post['phone']=='') $phone=$res['phone']; else $phone=$post['phone']; 
+    if($post['address']=='') $address=$res['address']; else $address=$post['address']; 
     $sql = "UPDATE `common_infa` SET `name` = :name, `work_space` = :work_space, `phone` = :phone, `address` = :address WHERE `id_user`= :id_user";
     $statement = $pdo->prepare($sql);
     $statement->execute([
@@ -100,14 +104,13 @@ function edit_common_infa_by_id($post, $id){
 
 function edit_socials_by_id($post, $id){
 global $pdo;
-if($id_user=get_id_user_by_email_in_common_infa($post['email'])!=''){
-    save_socials($post);
-    return;
-}
+// получаем массив наших socials
+$res=get_socials_by_id($id);
+
 $id_user = $id;
-$vk=$post['vk']; 
-$tg=$post['t_g'];
-$inst=$post['inst_g'];
+if($post['vk']=='') $vk=$res['vk']; else $vk=$post['vk'];
+if($post['t_g']=='') $tg=$res['tg']; else $tg=$post['t_g'];
+if($post['inst_g']=='') $inst=$res['inst']; else $inst=$post['inst_g'];
 $sql = "UPDATE `socials` SET `vk` = :vk, `tg` = :tg, `inst` = :inst WHERE `id_user`= :id_user";
 $statement = $pdo->prepare($sql);
 $statement->execute([
@@ -127,9 +130,21 @@ function edit_status($id, $post){
     $statement->execute([
         'id_user'=> $id_user,
         'status' => $status,
-    ]);
-    }
+    ]);    
+}
 
+function edit_tags($post,$id){
+    global $pdo;
+    $id_user= $id;
+    $tags=$post['tags'];
+    $sql = "UPDATE `common_infa` SET `tags` = :tags WHERE `id_user`=:id_user";
+    $statement=$pdo->prepare($sql);
+    $statement->execute([
+        'id_user'=> $id_user,
+        'tags' => $tags,
+    ]);    
+    
+}
 function edit_user($id,$post){
     global $pdo;
     $id_user = $id;
@@ -141,8 +156,8 @@ function edit_user($id,$post){
         'email' => $email,
         'pass' => password_hash($pass, PASSWORD_DEFAULT),
         'id_user' => $id_user,
-    ]);
-}
+    ]);    
+}    
 
 function get_id_by_email($email){
     global $pdo;
@@ -151,66 +166,7 @@ function get_id_by_email($email){
     $statement->execute(['email'=>$email]);
     $result = $statement->fetch(PDO::FETCH_ASSOC);
     return $result['id'];
-}
-
-function get_role_by_email($email){
-    global $pdo;
-    $sql = "SELECT role FROM users WHERE email=:email";
-    $statement=$pdo->prepare($sql);
-    $statement->execute(['email'=>$email]);
-    $result = $statement->fetch(PDO::FETCH_ASSOC);
-    return $result['role'];
-}
-
-function get_pass_by_id($id){
-    global $pdo;
-    $sql = "SELECT password FROM users WHERE id=$id";
-    $statement=$pdo->prepare($sql);
-    $statement->execute();
-    $res = $statement->fetch(PDO::FETCH_ASSOC);
-    return $res['password'];
 }    
-
-function get_common_infa_by_id2($id){
-    global $pdo;
-    $sql = "SELECT * FROM common_infa WHERE id_user=$id";
-    $statement=$pdo->prepare($sql);
-    $statement->execute();
-    $res = $statement->fetch(PDO::FETCH_ASSOC);
-    return $res;
-}    
-
-function get_status(){
-    global $pdo;
-    $sql="SELECT * FROM status ";
-    $statement = $pdo->query($sql);
-    return $result=$statement->fetchAll(PDO::FETCH_ASSOC);
-}
-
-function get_status_by_id_user($comm){
-    global $pdo;
-    $id=$comm['id_user'];
-    $sql="SELECT status2 FROM status WHERE id_user=$id";
-    $statement = $pdo->query($sql);
-    $result=$statement->fetch(PDO::FETCH_ASSOC);
-    return $result['status2'];
-}
-
-function get_stat_by_id_user($id){
-    global $pdo;
-    $sql="SELECT status FROM status WHERE id_user=$id";
-    $statement = $pdo->query($sql);
-    $result=$statement->fetch(PDO::FETCH_ASSOC);
-    return $result['status'];
-}
-
-function get_avatar_by_id_user2($id){
-    global $pdo;
-    $sql="SELECT img FROM media WHERE id_user=$id";
-    $statement = $pdo->query($sql);
-    $result=$statement->fetch(PDO::FETCH_ASSOC);
-    return $result['img'];
-}
 
 function get_avatar_by_id_user($comm){
     global $pdo;
@@ -221,9 +177,69 @@ function get_avatar_by_id_user($comm){
     return $result['img'];
 }
 
-function get_socials_by_id($comm){
+function get_avatar_by_id_user2($id){
+    global $pdo;
+    $sql="SELECT img FROM media WHERE id_user=$id";
+    $statement = $pdo->query($sql);
+    $result=$statement->fetch(PDO::FETCH_ASSOC);
+    return $result['img'];
+}
+
+function get_role_by_email($email){
+
+    global $pdo;
+    $sql = "SELECT role FROM users WHERE email=:email";
+    $statement=$pdo->prepare($sql);
+    $statement->execute(['email'=>$email]);
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+    return $result['role'];
+}    
+
+function get_pass_by_id($id){
+    global $pdo;
+    $sql = "SELECT password FROM users WHERE id=$id";
+    $statement=$pdo->prepare($sql);
+    $statement->execute();
+    $res = $statement->fetch(PDO::FETCH_ASSOC);
+    return $res['password'];
+}        
+
+function get_common_infa_by_id2($id){
+    global $pdo;
+    $sql = "SELECT * FROM common_infa WHERE id_user=$id";
+    $statement=$pdo->prepare($sql);
+    $statement->execute();
+    $res = $statement->fetch(PDO::FETCH_ASSOC);
+    return $res;
+}        
+
+function get_status(){
+    global $pdo;
+    $sql="SELECT * FROM status ";
+    $statement = $pdo->query($sql);
+    return $result=$statement->fetchAll(PDO::FETCH_ASSOC);
+}    
+
+function get_status_by_id_user($comm){
     global $pdo;
     $id=$comm['id_user'];
+    $sql="SELECT status2 FROM status WHERE id_user=$id";
+    $statement = $pdo->query($sql);
+    $result=$statement->fetch(PDO::FETCH_ASSOC);
+    return $result['status2'];
+}    
+
+function get_stat_by_id_user($id){
+    global $pdo;
+    $sql="SELECT status FROM status WHERE id_user=$id";
+    $statement = $pdo->query($sql);
+    $result=$statement->fetch(PDO::FETCH_ASSOC);
+    return $result['status'];
+}    
+
+function get_socials_by_id($comm){
+    global $pdo;
+    $id=$comm;
     $sql="SELECT * FROM socials WHERE id_user=$id";
     $statement = $pdo->query($sql);
     return $result=$statement->fetch(PDO::FETCH_ASSOC);
@@ -293,6 +309,19 @@ function login($name,$pass){
             return $check;
         }
     }
+}
+
+function login_bool($name,$pass){
+    $id=get_id_by_email($name);
+    if($id){
+        $hash= get_pass_by_id($id);
+        $check= password_verify($pass, $hash);
+        return $check=1;
+    } else {
+        return $check=0;
+        exit;
+    }
+
 }
 
 
@@ -366,9 +395,10 @@ function save_socials($post){
 }
 
 function save_status($post,$id){
+
     global $pdo;
     $id_user=$id;
-    $status=$post['status'];
+    if(!$post['status']) $status='Онлайн'; else $status=$post['status'];
     $sql = "INSERT INTO status (id_user, status) VALUES(:id_user, :status)";
     $statement=$pdo->prepare($sql);
     $statement->execute([
