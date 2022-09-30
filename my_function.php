@@ -63,10 +63,10 @@ function edit_avatar_into_media($files, $id){
         $name=$old_img;
     } else {
         //запись медиа-данных, статуса и нового имени картинки аватара в таблицу media
-        $extension = pathinfo($img["image"]['name'], PATHINFO_EXTENSION);
+        $extension = pathinfo($files["image"]['name'], PATHINFO_EXTENSION);
         $name = uniqid().'.'.$extension;
         //создание нового имени со старым расширением
-        move_uploaded_file($img["image"]['tmp_name'], "uploads/".$name);
+        move_uploaded_file($files["image"]['tmp_name'], "uploads/".$name);
         //запись файла с новым именем в uploads
         delete_old_avatar_from_uploads($old_img);
     }
@@ -178,6 +178,22 @@ function get_avatar_by_id_user2($id){
     return $result['img'];
 }
 
+function get_common_infa_by_id($comm){
+    global $pdo;
+    $id=$comm;
+    $sql="SELECT * FROM common_infa WHERE id_user=$id";
+    $statement = $pdo->query($sql);
+    return $result=$statement->fetch(PDO::FETCH_ASSOC);
+}
+
+function get_common_infa_by_id2($id){
+    global $pdo;
+    $sql = "SELECT * FROM common_infa WHERE id_user=$id";
+    $statement=$pdo->prepare($sql);
+    $statement->execute();
+    $res = $statement->fetch(PDO::FETCH_ASSOC);
+    return $res;
+}    
 function get_id_by_email($email){
     global $pdo;
     $sql = "SELECT id FROM users WHERE email=:email";
@@ -185,16 +201,6 @@ function get_id_by_email($email){
     $statement->execute(['email'=>$email]);
     $result = $statement->fetch(PDO::FETCH_ASSOC);
     return $result['id'];
-}    
-
-function get_role_by_email($email){
-
-    global $pdo;
-    $sql = "SELECT role FROM users WHERE email=:email";
-    $statement=$pdo->prepare($sql);
-    $statement->execute(['email'=>$email]);
-    $result = $statement->fetch(PDO::FETCH_ASSOC);
-    return $result['role'];
 }    
 
 function get_pass_by_id($id){
@@ -206,14 +212,16 @@ function get_pass_by_id($id){
     return $res['password'];
 }        
 
-function get_common_infa_by_id2($id){
+function get_role_by_email($email){
+
     global $pdo;
-    $sql = "SELECT * FROM common_infa WHERE id_user=$id";
+    $sql = "SELECT role FROM users WHERE email=:email";
     $statement=$pdo->prepare($sql);
-    $statement->execute();
-    $res = $statement->fetch(PDO::FETCH_ASSOC);
-    return $res;
-}        
+    $statement->execute(['email'=>$email]);
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+    return $result['role'];
+}    
+    
 
 function get_status(){
     global $pdo;
@@ -246,13 +254,6 @@ function get_socials_by_id($id){
     return $result=$statement->fetch(PDO::FETCH_ASSOC);
 }
 
-function get_common_infa_by_id($comm){
-    global $pdo;
-    $id=$comm;
-    $sql="SELECT * FROM common_infa WHERE id_user=$id";
-    $statement = $pdo->query($sql);
-    return $result=$statement->fetch(PDO::FETCH_ASSOC);
-}
 
 function get_media(){
     global $pdo;

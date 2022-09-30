@@ -3,7 +3,7 @@ session_start();
 require 'my_function.php';
 $common=get_common_infa_by_id($_GET['id']);
 $media=get_avatar_by_id_user($common);
-$socials=get_socials_by_id($common);
+$socials=get_socials_by_id($common['id_user']);
 
 ?>
 <!DOCTYPE html>
