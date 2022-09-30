@@ -125,7 +125,7 @@
                                     <label class="form-label" for="example-select">Выберите статус</label>
                                     <select class="form-control" id="example-select" name="status">
                                         <?php foreach($option as $opt => $ion): ?>
-                                            <option <?php if($stat==$opt) echo'selected'?>><?php echo $ion ?></option>
+                                            <option <?php if($opt=='danger') echo 'selected'?>><?php echo $ion ?></option>
                                         <?php endforeach ?>
                                             <!-- <option>Онлайн</option>
                                             <option>Отошел</option>

@@ -20,7 +20,9 @@ function add_user($email,$password){
 }
 
 function delete_old_avatar_from_uploads($old_name){
-    if(is_link("uploads/".$old_name)) unlink("uploads/".$old_name);
+    if($old_name !='no'){
+        unlink("uploads/".$old_name);
+    }
 }
 
 function delete_user_by_id($id){

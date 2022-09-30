@@ -9,7 +9,7 @@ if($_SESSION['role']=='admin' or $_SESSION['id']==$_GET['id_user']){
 
 
     $old_name = get_avatar_by_id_user2($id);
-    delete_old_avatar_from_uploads($old_name);
+    // delete_old_avatar_from_uploads($old_name);
     if($old_name=='') {
         save_avatar_into_media($_FILES,$id);
         set_sess_mess('success','АВАТАР установлен');
