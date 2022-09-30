@@ -115,12 +115,21 @@
 
                                 
                                 <!-- status -->
+                                <?php $option=[
+                                                'success' =>'Онлайн',
+                                                'warning' =>'Отошел',
+                                                'danger' =>'Не беспокоить',
+                                                'primary' =>'Пох все',
+                                            ];?>
                                 <div class="form-group">
                                     <label class="form-label" for="example-select">Выберите статус</label>
                                     <select class="form-control" id="example-select" name="status">
-                                        <option>Онлайн</option>
-                                        <option>Отошел</option>
-                                        <option>Не беспокоить</option>
+                                        <?php foreach($option as $opt => $ion): ?>
+                                            <option <?php if($stat==$opt) echo'selected'?>><?php echo $ion ?></option>
+                                        <?php endforeach ?>
+                                            <!-- <option>Онлайн</option>
+                                            <option>Отошел</option>
+                                            <option>Не беспокоить</option> -->
                                     </select>
                                 </div>
 

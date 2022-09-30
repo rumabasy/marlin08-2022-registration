@@ -64,9 +64,10 @@ $stat=get_stat_by_id_user($_SESSION['id']);
                                         <!-- status -->
                                         <div class="form-group">
                                             <?php $option=[
-                                                'online' =>'Онлайн',
-                                                'away' =>'Отошел',
-                                                'no_disturb' =>'Не беспокоить',
+                                                'success' =>'Онлайн',
+                                                'warning' =>'Отошел',
+                                                'danger' =>'Не беспокоить',
+                                                'primary' =>'Пох все',
                                             ];?>
                                             <label class="form-label" 
                                             for="example-select">Выберите статус</label>

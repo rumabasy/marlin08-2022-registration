@@ -9,14 +9,14 @@ function add_user($email,$password){
     $statement = $pdo->prepare($sql);
     $statement->execute([
         'email' => $email, 
-        'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
+        'password' => $password,
     ]);
     // создать пустые записи в common_infa, media, status, socials
     $id=get_id_by_email($email);
     save_into_common_infa($_POST);
     save_avatar_into_media($id);
     save_socials($_POST);
-    save_status($_POST, $id);
+    save_status($id);
 }
 
 function delete_old_avatar_from_uploads($old_name){
@@ -74,7 +74,7 @@ function edit_avatar_into_media($files, $id){
     global $pdo;
     $sql = "UPDATE `media` SET `img` = :image WHERE `id_user` = :id_user";
     $statement = $pdo->prepare($sql);
-    $statement->bindparam(":image", $name);
+    $statement->bindparam(":image", $new_name);
     $statement->bindparam(":id_user", $id_user);
     $statement->execute([
         "image" => $name,
@@ -122,7 +122,7 @@ $statement->execute([
 ]);
 }
 
-function edit_status($id, $post){
+function edit_status($post,$id){
     global $pdo;
     $id_user= $id;
     $status=$post['status'];
@@ -134,6 +134,29 @@ function edit_status($id, $post){
     ]);    
 }
 
+function edit_status2($post, $id){
+    global $pdo;
+    $option=[
+        'success' =>'Онлайн',
+        'warning' =>'Отошел',
+        'danger' =>'Не беспокоить',
+        'primary' =>'Пох все',
+    ];
+    foreach ($option as $opt =>$ion){
+        if ($ion == $post['status']){
+            $id_user= $id;
+            $status2=$opt;
+            $sql = "UPDATE `status` SET `status2` = :status2 WHERE `id_user`=:id_user";
+            $statement=$pdo->prepare($sql);
+            $statement->execute([
+                'id_user'=> $id_user,
+                'status2' => $status2,
+            ]);  
+            break;
+        }
+    }
+
+}
 function edit_tags($post,$id){
     global $pdo;
     $id_user= $id;
@@ -395,11 +418,11 @@ function save_socials($post){
     ]);
 }
 
-function save_status($post,$id){
+function save_status($id){
 
     global $pdo;
     $id_user=$id;
-    if(!$post['status']) $status='Онлайн'; else $status=$post['status'];
+    $status='Онлайн';
     $sql = "INSERT INTO status (id_user, status) VALUES(:id_user, :status)";
     $statement=$pdo->prepare($sql);
     $statement->execute([
