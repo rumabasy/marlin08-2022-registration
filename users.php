@@ -73,8 +73,7 @@ require 'my_function.php' ;
             </div>
             <div class="row" id="js-contacts">
                 <?php //скачать массив socials,common_infa,media из бд?>
-                <?php                 $common=get_common_infa();                ?>
-                <!-- <?php $n=0?> -->
+                <?php $common=get_common_infa(); ?>
                 <?php foreach($common as $comm): ?>
                 <div class="col-xl-4">
                     <div id="c_<?php echo $comm['id_user'] ?>" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="<?php echo $comm['tags'] ?>">
@@ -112,7 +111,7 @@ require 'my_function.php' ;
                                     <?php endif; ?>
                                     <span class="text-truncate text-truncate-xl"><?php echo $comm['work_space'] ?></span>
                                 </div>
-                                <button class="js-expand-btn btn btn-sm btn-default d-none" data-toggle="collapse" data-target="#c_1 > .card-body + .card-body" aria-expanded="false">
+                                <button class="js-expand-btn btn btn-sm btn-default d-none" data-toggle="collapse" data-target="#c_<?php echo $comm['id_user'] ?> > .card-body + .card-body" aria-expanded="false">
                                     <span class="collapsed-hidden">+</span>
                                     <span class="collapsed-reveal">-</span>
                                 </button>
