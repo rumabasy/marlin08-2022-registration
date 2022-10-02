@@ -258,10 +258,10 @@ function get_status(){
 function get_status_by_id_user($comm){
     global $pdo;
     $id=$comm['id_user'];
-    $sql="SELECT status2 FROM status WHERE id_user=$id";
+    $sql="SELECT status FROM status WHERE id_user=$id";
     $statement = $pdo->query($sql);
     $result=$statement->fetch(PDO::FETCH_ASSOC);
-    return $result['status2'];
+    return $result['status'];
 }    
 
 function get_stat_by_id_user($id){
@@ -424,7 +424,7 @@ function save_status($id){
 
     global $pdo;
     $id_user=$id;
-    $status='Онлайн';
+    $status='success';
     $sql = "INSERT INTO status (id_user, status) VALUES(:id_user, :status)";
     $statement=$pdo->prepare($sql);
     $statement->execute([

@@ -13,7 +13,7 @@ if($_SESSION['role']=='admin' or $_SESSION['id']==$_GET['id']){
         exit;    
         
     } else {
-        edit_status2($_POST,$id);
+        // edit_status2($_POST,$id);
         edit_status($_POST, $id);
         set_sess_mess('success', 'Статус успешно изменен');
         redirect_to('users.php');

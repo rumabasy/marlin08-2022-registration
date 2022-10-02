@@ -11,7 +11,7 @@ if($login=login_bool($_POST['email'],$_POST['password'])==1){
     edit_common_infa_by_id($_POST, $id);
     edit_avatar_into_media($_FILES, $id);
     edit_status($_POST, $id);
-    edit_status2($_POST, $id);
+    // edit_status2($_POST, $id);
     edit_socials_by_id($_POST, $id);
     edit_tags($_POST, $id);
     set_sess_mess('success',"Данные отредактированы");
@@ -31,7 +31,7 @@ if($login=login_bool($_POST['email'],$_POST['password'])==1){
         edit_avatar_into_media($_FILES, $id);
         edit_socials_by_id($_POST,$id);
         edit_status($_POST,$id);
-        edit_status2($_POST,$id);
+        // edit_status2($_POST,$id);
         edit_tags($_POST, $id);
         set_sess_mess('success',"данные нового пользователя успешно записаны");
         redirect_to('users.php');

@@ -73,7 +73,7 @@ $stat=get_stat_by_id_user($_SESSION['id']);
                                             for="example-select">Выберите статус</label>
                                             <select class="form-control" id="example-select" name="status">
                                                 <?php foreach($option as $opt => $ion): ?>
-                                                <option <?php if($stat==$ion) echo'selected'?>><?php echo $ion ?></option>
+                                                <option <?php if($stat==$opt) echo'selected'?> value="<?php echo $opt ?>"><?php echo $ion ?></option>
                                                 <?php endforeach ?>
                                             </select>
                                         </div>
