@@ -2,6 +2,7 @@
 session_start();
 $pdo = new PDO("mysql:host=localhost;dbname=marlin", "root", "");
 
+if(!is_dir('uploads')) mkdir('uploads');
 
 function add_user($email,$password){
     global $pdo;
@@ -21,7 +22,7 @@ function add_user($email,$password){
 
 function delete_old_avatar_from_uploads($old_name){
     if($old_name !='no'){
-        unlink("uploads/".$old_name);
+        if(is_link("uploads/".$old_name))  unlink("uploads/".$old_name);
     }
 }
 
