@@ -3,6 +3,7 @@
 начало с html страничек
 
 сделать папку uploads
+создать в phpMyAdmin
 DB marlin, 'root', ''
 дб таблицы:
 media == id,id_user,img
